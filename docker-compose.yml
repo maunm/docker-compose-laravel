@@ -18,6 +18,9 @@ services:
         depends_on:
             - php
             - mysqldb
+        networks:
+            - code-network
+            
     php:
         image: nanoninja/php-fpm:${PHP_VERSION}
         container_name: php-container
@@ -25,12 +28,18 @@ services:
         volumes:
             - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
             - "./laravel:/var/www/html"
+        networks:
+            - code-network
+
     composer:
         image: "composer"
         container_name: composer-container
         volumes:
             - "./laravel/:/app"
         command: install
+        networks:
+            - code-network
+
     myadmin:
         image: phpmyadmin/phpmyadmin
         container_name: phpmyadmin-container
@@ -38,10 +47,12 @@ services:
             - "8080:80"
         environment:
             - PMA_ARBITRARY=1
-            - PMA_HOST=${MYSQL_HOST}
+            - PMA_HOST=mysql-container
         restart: always
         depends_on:
             - mysqldb
+        networks:
+            - code-network
     mysqldb:
         image: mysql:${MYSQL_VERSION}
         container_name: mysql-container
@@ -57,3 +68,9 @@ services:
             - "8989:3306"
         volumes:
             - "./data/db/mysql:/var/lib/mysql"
+        networks:
+            - code-network
+
+networks:
+    code-network:
+        driver: bridge 
