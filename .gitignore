@@ -1,0 +1,62 @@
+# -----------------------------------------------------------------
+# .gitignore para Docker
+# -----------------------------------------------------------------
+
+mysql/data/
+data/
+
+nginx/logs/
+
+nginx/sites/*
+!nginx/sites/default.conf
+!nginx/sites/api.dev.conf
+
+# ignore files starting with .
+.*
+
+!.gitignore
+
+!.editorconfig
+
+!readme.md
+
+!.gitattributes
+
+!.env.example
+
+!.htaccess
+
+# ignore files starting with ~
+~*
+
+# OS files
+ehthumbs.db
+Thumbs.db
+
+# Editor files
+*.sublime-project
+*.sublime-workspace
+*.komodoproject
+.idea
+
+*.log
+*.sql
+*.sqlite
+
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+.DS_Store

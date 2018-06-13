@@ -1,61 +1,59 @@
 version: '3'
 services:
-    php:
-        image: php:fpm-alpine
-        container_name: php
-        volumes:
-            - ./laravel:/var/www
-        entrypoint:
-            - php-fpm
-        networks:
-            - code-network
-
-    nginx:
+    web:
         image: nginx:alpine
-        container_name: nginx
+        container_name: nginx-container
         volumes:
-            - ./laravel:/var/www
-            - ./build/nginx.conf:/etc/nginx/conf.d/default.conf
-        links:
-            - php
+            - "./etc/nginx/default.conf:/etc/nginx/conf.d/default.conf"
+            - "./etc/ssl:/etc/ssl"
+            - "./laravel:/var/www/html"
+            - "./etc/nginx/default.template.conf:/etc/nginx/conf.d/default.template"
         ports:
-            - 8080:80
-        networks:
-            - code-network
-
-    mysql:
-        image: mysql:5.7
-        container_name: mysql57
-        volumes:
-            - dbdata:/var/lib/mysql
-        ports:
-            - 3305:3306
-
-        env_file:
-            - "./laravel/.env"
-        environment: 
-            MYSQL_USER: root
-            MYSQL_DATABASE: ${DB_DATABASE}
-            MYSQL_PASSWORD: root12
-            MYSQL_ROOT_PASSWORD: root
-        networks:
-            - code-network
-
-    phpmyadmin:
-        image: phpmyadmin/phpmyadmin
-        container_name: phpmyadmin
-        links: 
-            - mysql
-        ports:
-            - 8000:80
+            - "8000:80"
+            - "3000:443"
         environment:
-            PMA_HOST: mysql
-        networks:
-            - code-network
-
-volumes:
-    dbdata:
-
-networks:
-    code-network:
-        driver: bridge
+            - NGINX_HOST=${NGINX_HOST}
+        command: /bin/sh -c "envsubst '$$NGINX_HOST' < /etc/nginx/conf.d/default.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+        restart: always
+        depends_on:
+            - php
+            - mysqldb
+    php:
+        image: nanoninja/php-fpm:${PHP_VERSION}
+        container_name: php-container
+        restart: always
+        volumes:
+            - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
+            - "./laravel:/var/www/html"
+    composer:
+        image: "composer"
+        container_name: composer-container
+        volumes:
+            - "./laravel/:/app"
+        command: install
+    myadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: phpmyadmin-container
+        ports:
+            - "8080:80"
+        environment:
+            - PMA_ARBITRARY=1
+            - PMA_HOST=${MYSQL_HOST}
+        restart: always
+        depends_on:
+            - mysqldb
+    mysqldb:
+        image: mysql:${MYSQL_VERSION}
+        container_name: mysql-container
+        restart: always
+        env_file:
+            - ".env"
+        environment:
+            - MYSQL_DATABASE=${MYSQL_DATABASE}
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+            - MYSQL_USER=${MYSQL_USER}
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+        ports:
+            - "8989:3306"
+        volumes:
+            - "./data/db/mysql:/var/lib/mysql"
