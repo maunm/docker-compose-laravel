@@ -14,7 +14,7 @@ class UserController extends Controller
         $this->content = array();
     }
     public function login() {
-        if (Auth::attempt(['email' => 'mauriciogn@thehangar.cr', 'password' => 'asd123'])) {
+        if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
             $user = Auth::user();
             $this->content['token'] = $user->createToken('Pizza App')->accessToken;
             $status = 200;

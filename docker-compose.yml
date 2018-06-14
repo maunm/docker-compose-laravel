@@ -2,6 +2,7 @@ version: '2'
 
 services:
   web:
+    container_name: nginx-1.10
     build:
       context: ./
       dockerfile: web.docker
@@ -12,6 +13,7 @@ services:
     links:
       - app
   app:
+    container_name: php-7
     build:
       context: ./
       dockerfile: app.docker
@@ -24,8 +26,19 @@ services:
       - DB_HOST=db
   db:
     image: mysql:5.7
+    container_name: mysql-5.7
     environment:
       - MYSQL_ROOT_PASSWORD=secret
-      - MYSQL_DATABASE=dockerApp
+      - MYSQL_DATABASE=laravel_db
     ports:
       - "33061:3306"
+
+  myadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    links:
+      - db
+    ports:
+      - "8000:80"
+    depends_on:
+      - db
