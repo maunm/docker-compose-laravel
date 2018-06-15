@@ -5,6 +5,10 @@
 mysql/data/
 data/
 
+# Libraries
+vendor/
+node_modules/
+
 nginx/logs/
 
 nginx/sites/*
