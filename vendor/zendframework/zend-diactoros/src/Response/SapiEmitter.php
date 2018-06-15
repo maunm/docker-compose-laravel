@@ -8,6 +8,7 @@
 namespace Zend\Diactoros\Response;
 
 use Psr\Http\Message\ResponseInterface;
+use RuntimeException;
 
 class SapiEmitter implements EmitterInterface
 {
@@ -25,8 +26,8 @@ class SapiEmitter implements EmitterInterface
     {
         $this->assertNoPreviousOutput();
 
-        $this->emitHeaders($response);
         $this->emitStatusLine($response);
+        $this->emitHeaders($response);
         $this->emitBody($response);
     }
 
