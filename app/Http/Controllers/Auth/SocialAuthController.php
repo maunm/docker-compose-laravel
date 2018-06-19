@@ -73,20 +73,17 @@ class SocialAuthController extends Controller
             return $this->sendFailedResponse($e->getMessage());
         }
 
-        // check for email in returned user
-        return empty( $user->email )
-            ? $this->sendFailedResponse("No email id returned from {$driver} provider.")
-            : $this->loginOrCreateAccount($user, $driver);
-    }
-
-    /**
-     * Send a successful response
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    protected function sendSuccessResponse()
-    {
-        return redirect()->intended('home');
+        // start the session and response
+        if (empty($user->email)) {
+            // set a error
+            return response()->json([
+                'error' => 'Authentication Error',
+                'errorDetail' => "No email id returned from {$driver} provider."
+                ]);
+        } else {
+            $this->loginOrCreateAccount($user, $driver);
+            return response()->json($user);
+        }
     }
 
     /**
@@ -132,8 +129,6 @@ class SocialAuthController extends Controller
 
         // login the user
         Auth::login($user, true);
-
-        return $this->sendSuccessResponse();
     }
 
     /**
