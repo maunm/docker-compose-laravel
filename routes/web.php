@@ -29,11 +29,6 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::delete('projects_perma_del/{id}', ['uses' => 'Admin\ProjectsController@perma_del', 'as' => 'projects.perma_del']);
 });
 
-// Social login routes...
-Route::get('/fb_redirect', 'SocialAuthFacebookController@redirect');
-Route::get('/fb_callback', 'SocialAuthFacebookController@callback');
-Route::get('/tw_redirect', 'SocialAuthTwitterController@redirect');
-Route::get('/tw_callback', 'SocialAuthTwitterController@callback');
 
 // Social Auth
 Route::get('auth/social', 'Auth\SocialAuthController@show')->name('social.login');
