@@ -18,6 +18,12 @@ class Create1505472112UsersTable extends Migration
                 $table->string('name');
                 $table->string('email');
                 $table->string('password');
+
+                $table->string('avatar')->nullable();
+                $table->string('provider', 20)->nullable();
+                $table->string('provider_id')->nullable();
+                $table->string('access_token')->nullable();
+                
                 $table->string('remember_token')->nullable();
                 
                 $table->timestamps();

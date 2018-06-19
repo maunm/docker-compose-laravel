@@ -194,6 +194,9 @@ return [
         Laravel\Passport\PassportServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
 
+        // Support the social media login
+        Laravel\Socialite\SocialiteServiceProvider::class,
+
     ],
 
     /*
@@ -249,6 +252,8 @@ return [
         'Image'        => Intervention\Image\Facades\Image::class,
         'Form'         => Collective\Html\FormFacade::class,
         'Html'         => Collective\Html\HtmlFacade::class,
+
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         
     ],
 

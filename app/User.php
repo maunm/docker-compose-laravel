@@ -20,8 +20,9 @@ use Laravel\Passport\HasApiTokens;
 class User extends Authenticatable
 {
     use Notifiable, HasApiTokens;
-    protected $fillable = ['name', 'email', 'password', 'remember_token', 'role_id'];
-
+    protected $fillable = ['name', 'email', 'password', 
+    'avatar', 'provider_id', 'provider',
+    'access_token', 'remember_token', 'role_id'];
 
     /**
      * Hash password

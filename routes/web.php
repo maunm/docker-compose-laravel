@@ -27,6 +27,15 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::post('projects_mass_destroy', ['uses' => 'Admin\ProjectsController@massDestroy', 'as' => 'projects.mass_destroy']);
     Route::post('projects_restore/{id}', ['uses' => 'Admin\ProjectsController@restore', 'as' => 'projects.restore']);
     Route::delete('projects_perma_del/{id}', ['uses' => 'Admin\ProjectsController@perma_del', 'as' => 'projects.perma_del']);
-
-
 });
+
+// Social login routes...
+Route::get('/fb_redirect', 'SocialAuthFacebookController@redirect');
+Route::get('/fb_callback', 'SocialAuthFacebookController@callback');
+Route::get('/tw_redirect', 'SocialAuthTwitterController@redirect');
+Route::get('/tw_callback', 'SocialAuthTwitterController@callback');
+
+// Social Auth
+Route::get('auth/social', 'Auth\SocialAuthController@show')->name('social.login');
+Route::get('oauth/{driver}', 'Auth\SocialAuthController@redirectToProvider')->name('social.oauth');
+Route::get('oauth/{driver}/callback', 'Auth\SocialAuthController@handleProviderCallback')->name('social.callback');
