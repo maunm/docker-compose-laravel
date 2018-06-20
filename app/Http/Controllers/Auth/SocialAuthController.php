@@ -65,7 +65,7 @@ class SocialAuthController extends Controller
      * @param $driver
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function handleProviderCallback( $driver )
+    public function handleProviderCallback($driver)
     {
         try {
             $user = Socialite::driver($driver)->user();
@@ -104,7 +104,7 @@ class SocialAuthController extends Controller
         $user = User::where('email', $providerUser->getEmail())->first();
 
         // if user already found
-        if( $user ) {
+        if($user) {
             // update the avatar and provider that might have changed
             $user->update([
                 'avatar' => $providerUser->avatar,

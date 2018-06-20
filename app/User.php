@@ -17,12 +17,11 @@ use Laravel\Passport\HasApiTokens;
  * @property string $role
  * @property string $remember_token
  */
-class User extends Authenticatable
+class User extends \TCG\Voyager\Models\User
 {
     use Notifiable, HasApiTokens;
-    protected $fillable = ['name', 'email', 'password', 
-    'avatar', 'provider_id', 'provider',
-    'access_token', 'remember_token', 'role_id'];
+    protected $fillable = ['name', 'email', 'password','provider_id', 'provider',
+    'access_token', 'remember_token'];
 
     /**
      * Hash password
@@ -32,21 +31,6 @@ class User extends Authenticatable
     {
         if ($input)
             $this->attributes['password'] = app('hash')->needsRehash($input) ? Hash::make($input) : $input;
-    }
-
-
-    /**
-     * Set to null if empty
-     * @param $input
-     */
-    public function setRoleIdAttribute($input)
-    {
-        $this->attributes['role_id'] = $input ? $input : null;
-    }
-
-    public function role()
-    {
-        return $this->belongsTo(Role::class, 'role_id');
     }
 
 
