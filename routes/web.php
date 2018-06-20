@@ -1,5 +1,5 @@
 <?php
-Route::get('/', function () { return redirect('/admin/home'); });
+Route::get('/', function () { return redirect('/admin'); });
 
 // Authentication Routes...
 $this->get('login', 'Auth\LoginController@showLoginForm')->name('auth.login');
@@ -35,7 +35,7 @@ Route::get('auth/social', 'Auth\SocialAuthController@show')->name('social.login'
 Route::get('oauth/{driver}', 'Auth\SocialAuthController@redirectToProvider')->name('social.oauth');
 Route::get('oauth/{driver}/callback', 'Auth\SocialAuthController@handleProviderCallback')->name('social.callback');
 
-
+// Define routes for Voyager
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 });
