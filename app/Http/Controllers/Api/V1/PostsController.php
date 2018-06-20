@@ -19,4 +19,5 @@ class PostsController extends Controller
     {
         return new PostResource(Post::findOrFail($id));
     }
+    
 }
